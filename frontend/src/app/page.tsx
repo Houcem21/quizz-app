@@ -41,7 +41,8 @@ export default function Home() {
   
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
   //Update the selected answers list
-  function onSubmitAnswer() {
+  function onSubmitAnswer(e: React.FormEvent) {
+    e.preventDefault();
     setSelectedAnswers((prevAnswers) => [...prevAnswers, selectedAnswer])
     console.log(selectedAnswers.length);
     //Advance to the next page
@@ -87,7 +88,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="h-24 submit-btn-container w-screen">
-        <button onClick={(e) => {e.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer bg-primary-color-on-active">submit</button>
+        <button onClick={onSubmitAnswer} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer bg-primary-color-on-active">submit</button>
       </footer>
       {(questionIndex> 0) && AnswerSheet(selectedAnswers)}
     </div>
