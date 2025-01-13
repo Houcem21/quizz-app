@@ -1,6 +1,13 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const getQuestions = async (): Promise<any[]> => {
+interface Question {
+  question: string;
+  answers: string[];
+  correctAnswer: string;
+  category: string;
+}
+
+const getQuestions = async (): Promise<Question[]> => {
   try {
     console.log(API_URL)
     const response = await fetch(`${API_URL}/api/questions`);

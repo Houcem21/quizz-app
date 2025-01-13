@@ -8,9 +8,16 @@ import Image from "next/image";
 
 export default function Home() {
 
+  interface Question {
+    question: string;
+    answers: string[];
+    correctAnswer: string;
+    category: string;
+}
+
   //Get the questions
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [questions, setQuestions] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -21,7 +28,7 @@ export default function Home() {
     console.log(questions.length)
   }, [])
 
-  let currentQuestion = questions[questionIndex] || {question: "Loading...", answers: []};
+  const currentQuestion = questions[questionIndex] || {question: "Loading...", answers: []};
   
   //Listen to the answer
   const [selectedAnswer, setSelectedAnswer] = useState("");
