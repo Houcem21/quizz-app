@@ -15,7 +15,7 @@ export default function Home() {
       setQuestions(data);
     };
     fetchQuestions();
-    console.log(questions)
+    console.log(questions.length)
   }, [])
 
   let currentQuestion = questions[questionIndex] || {question: "Loading...", answers: []};
@@ -24,7 +24,7 @@ export default function Home() {
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const AnswerButton = (answer: string, key: number) =>
-    <button onClick={() => {setSelectedAnswer(answer)}} className={`answer minw-[100] rounded-xl p-5 bg-primary-color-on-hover ${selectedAnswer===answer ? 'bg-primary-color' : 'bg-secondary-color'}`} key={key} >
+    <button onClick={() => {setSelectedAnswer(answer)}} className={`answer min-w-60 rounded-xl p-5 bg-primary-color-on-hover ${selectedAnswer===answer ? 'bg-primary-color' : 'bg-secondary-color'}`} key={key} >
       <p className="text-3xl">{answer}</p>
     </button>
 
@@ -33,24 +33,33 @@ export default function Home() {
   //Update the selected answers list
   function onSubmitAnswer() {
     setSelectedAnswers((prevAnswers) => [...prevAnswers, selectedAnswer])
-    console.log(selectedAnswers);
+    console.log(selectedAnswers.length);
     //Advance to the next page
     if (questionIndex < questions.length - 1) {
       setQuestionIndex(questionIndex + 1);
       setSelectedAnswer("");
     }
     else {
-      console.log("Quizz complete! You answered: " + selectedAnswers)
+      console.log("Quizz complete! You scored: " + calculateScore(selectedAnswers))
     }
   }
 
   const AnswerSheet = (answers: string[]) => 
-    <div className={`absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center right-0 ${answers.length === questions.length ? 'block' : 'hidden'}`}>
+    <div className={`absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center right-0 ${answers.length === questions.length ? "block" : "hidden"}`}>
       <div className={`opacity-[.6] bg-black h-screen w-screen absolute`} />
-      <ul className="flex justify-between bg-secondary-color items-center w-[80%] h-24 text-xl p-20 opacity-[1] z-10">
-        {answers.map((answer, index) => <li key={index}>{answer}</li>)}
+      <ul className="flex justify-between bg-secondary-color items-center w-[80%] h-24 text-xl p-20 opacity-[1] z-10 gap-20 overflow-x-scroll overflow-y-hidden">
+        {answers.map((answer, index) => <li className={`p-5 ${answer === questions[index].correctAnswer ? "bg-green-700" : "bg-red-700"}`} key={index}>{answer}</li>)}
       </ul>
+      <div className="h-20 w-40 flex justify-center items-center bg-secondary-color absolute bottom-40 text-3xl">{calculateScore(selectedAnswers)} / {questions.length}</div>
     </div>
+
+  function calculateScore(answers: string[]) {
+    let score = 0;
+    answers.forEach((answer, index) => {
+      if (answer === questions[index].correctAnswer) score++;
+    })
+    return score;
+  }
 
   return (
     <div className={`flex flex-col text-center h-screen w-full justify-between`}>
@@ -64,9 +73,9 @@ export default function Home() {
         </section>
       </main>
       <footer className="h-24 submit-btn-container w-screen">
-        <div onClick={(e) => {e?.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%]">submit</div>
+        <div onClick={(e) => {e?.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer">submit</div>
       </footer>
-      {AnswerSheet(selectedAnswers)}
+      {(questionIndex> 0) && AnswerSheet(selectedAnswers)}
     </div>
   );
 }
