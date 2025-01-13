@@ -1,7 +1,10 @@
 "use client"
 import { useState, useEffect } from "react";
+import { HomeIcon } from "@/assets";
 import Header from "./ui/components/Header";
 import getQuestions from "@/data/api";
+import Image from "next/image";
+
 
 export default function Home() {
 
@@ -44,13 +47,17 @@ export default function Home() {
     }
   }
 
+
   const AnswerSheet = (answers: string[]) => 
     <div className={`absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center right-0 ${answers.length === questions.length ? "block" : "hidden"}`}>
       <div className={`opacity-[.6] bg-black h-screen w-screen absolute`} />
-      <ul className="flex justify-between bg-secondary-color items-center w-[80%] h-24 text-xl p-20 opacity-[1] z-10 gap-20 overflow-x-scroll overflow-y-hidden">
-        {answers.map((answer, index) => <li className={`p-5 ${answer === questions[index].correctAnswer ? "bg-green-700" : "bg-red-700"}`} key={index}>{answer}</li>)}
-      </ul>
-      <div className="h-20 w-40 flex justify-center items-center bg-secondary-color absolute bottom-40 text-3xl">{calculateScore(selectedAnswers)} / {questions.length}</div>
+      <div className="bg-secondary-color opacity-[1] z-10 flex justify-center items-center">
+        <ul className="flex justify-between bg-secondary-color items-center w-[80%] h-24 text-xl py-20  gap-20 overflow-x-scroll overflow-y-hidden">
+          {answers.map((answer, index) => <li className={`text-5xl p-5 ${answer === questions[index].correctAnswer ? "bg-green-700" : "bg-red-700"}`} key={index}>{answer}</li>)}
+        </ul>
+      </div>
+      <div className="h-40 w-60 flex justify-center items-center bg-secondary-color absolute bottom-40 text-7xl">{calculateScore(selectedAnswers)} / {questions.length}</div>
+      <div className="close-icon absolute w-screen top-20 z-10 flex justify-center items-center cursor-pointer"><a href="./"><Image src={HomeIcon} alt="home-icon" height={200} /></a></div>
     </div>
 
   function calculateScore(answers: string[]) {
@@ -73,7 +80,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="h-24 submit-btn-container w-screen">
-        <div onClick={(e) => {e?.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer">submit</div>
+        <button onClick={(e) => {e?.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer bg-primary-color-on-active">submit</button>
       </footer>
       {(questionIndex> 0) && AnswerSheet(selectedAnswers)}
     </div>

@@ -1,4 +1,4 @@
-import UserIcon from '@/assets'
+import { UserIcon } from '@/assets';
 import Image from 'next/image'
 import React, { useState } from 'react'
 

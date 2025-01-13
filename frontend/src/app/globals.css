@@ -42,3 +42,6 @@ body {
 .bg-primary-color-on-hover:hover {
   background-color: var(--primary-color);
 }
+.bg-primary-color-on-active:active {
+  background-color: var(--primary-color);
+}
