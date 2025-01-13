@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <>
     <Menu />
-    <header className="h-100 inline-flex w-screen bg-tertiary-color justify-between items-end px-10">
+    <header className="h-24 inline-flex w-screen bg-tertiary-color justify-between items-end px-10">
         <Image 
         alt="user icon"
         src={UserIcon}

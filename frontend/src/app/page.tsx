@@ -1,34 +1,72 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./ui/components/Header";
+import getQuestions from "@/data/api";
 
 export default function Home() {
 
+  //Get the questions
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questions, setQuestions] = useState<any[]>([]);
+  
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const data = await getQuestions();
+      setQuestions(data);
+    };
+    fetchQuestions();
+    console.log(questions)
+  }, [])
+
+  let currentQuestion = questions[questionIndex] || {question: "Loading...", answers: []};
+  
+  //Listen to the answer
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
-  const answers = ["one", "two i think", "only one", "maybe 4 or more"]
-
   const AnswerButton = (answer: string, key: number) =>
-    <button onClick={() => setSelectedAnswer(answer)} className={`answer minw-[100] rounded-xl p-5 bg-primary-color-on-hover ${selectedAnswer===answer ? 'bg-primary-color' : 'bg-secondary-color'}`} key={key} >
+    <button onClick={() => {setSelectedAnswer(answer)}} className={`answer minw-[100] rounded-xl p-5 bg-primary-color-on-hover ${selectedAnswer===answer ? 'bg-primary-color' : 'bg-secondary-color'}`} key={key} >
       <p className="text-3xl">{answer}</p>
     </button>
+
   
-  
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
+  //Update the selected answers list
+  function onSubmitAnswer() {
+    setSelectedAnswers((prevAnswers) => [...prevAnswers, selectedAnswer])
+    console.log(selectedAnswers);
+    //Advance to the next page
+    if (questionIndex < questions.length - 1) {
+      setQuestionIndex(questionIndex + 1);
+      setSelectedAnswer("");
+    }
+    else {
+      console.log("Quizz complete! You answered: " + selectedAnswers)
+    }
+  }
+
+  const AnswerSheet = (answers: string[]) => 
+    <div className={`absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center right-0 ${answers.length === questions.length ? 'block' : 'hidden'}`}>
+      <div className={`opacity-[.6] bg-black h-screen w-screen absolute`} />
+      <ul className="flex justify-between bg-secondary-color items-center w-[80%] h-24 text-xl p-20 opacity-[1] z-10">
+        {answers.map((answer, index) => <li key={index}>{answer}</li>)}
+      </ul>
+    </div>
 
   return (
-    <div className={`inline-grid text-center h-screen w-full`}>
+    <div className={`flex flex-col text-center h-screen w-full justify-between`}>
       <Header />
-      <main className="grid gap-10 py-20">
+      <main className="grid gap-10 max-h-fit-content">
         <section className="question-container">
-          <h1 className="text-5xl uppercase px-5">How many knots are there in a half knot?</h1>
+          <h1 className="text-5xl uppercase px-5">{currentQuestion.question}</h1>
         </section>
         <section className="answers-container grid text-center gap-10 justify-center items-center">
-          {answers.map((answer, index) => AnswerButton(answer, index))}
+          {currentQuestion.answers.map((answer: string, index: number) => AnswerButton(answer, index))}
         </section>
       </main>
-      <footer className="submit-btn-container w-screen">
-        <button type="submit" className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-full">submit</button>
+      <footer className="h-24 submit-btn-container w-screen">
+        <div onClick={(e) => {e?.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%]">submit</div>
       </footer>
+      {AnswerSheet(selectedAnswers)}
     </div>
   );
 }
