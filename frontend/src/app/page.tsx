@@ -87,7 +87,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="h-24 submit-btn-container w-screen">
-        <button onClick={(e) => {e?.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer bg-primary-color-on-active">submit</button>
+        <button onClick={(e) => {e.preventDefault; onSubmitAnswer();}} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer bg-primary-color-on-active">submit</button>
       </footer>
       {(questionIndex> 0) && AnswerSheet(selectedAnswers)}
     </div>

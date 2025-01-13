@@ -24,7 +24,7 @@ export default function AdminDashboard() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e?.preventDefault();
+        e.preventDefault();
         const response = await fetch(`${API_URL}/api/questions`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
