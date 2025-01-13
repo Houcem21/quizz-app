@@ -1,5 +1,6 @@
 "use client"
 import React, {useState} from 'react'
+import Header from '../ui/components/Header';
 
 export default function AdminDashboard() {
 
@@ -45,7 +46,9 @@ export default function AdminDashboard() {
     };
 
     return (
+    <><Header />
     <div className="p-10">
+      
       <h1 className="text-5xl mb-5 text-center">Add a Question</h1>
       <form onSubmit={handleSubmit} className="grid gap-5">
         <input
@@ -80,6 +83,7 @@ export default function AdminDashboard() {
         <button type="submit" className="p-8 bg-tertiary-color text-white text-3xl bg-primary-color-on-active">Submit</button>
       </form>
     </div>
+    </>
     )
 
 }

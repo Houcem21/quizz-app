@@ -59,7 +59,7 @@ export default function Home() {
   const AnswerSheet = (answers: string[]) => 
     <div className={`absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center right-0 ${answers.length === questions.length ? "block" : "hidden"}`}>
       <div className={`opacity-[.6] bg-black h-screen w-screen absolute`} />
-      <div className="bg-secondary-color opacity-[1] z-10 flex justify-center items-center">
+      <div className="bg-secondary-color opacity-[1] z-10 flex justify-center items-center overflow-hidden">
         <ul className="flex justify-between bg-secondary-color items-center w-[80%] h-24 text-xl py-20  gap-20 overflow-x-scroll overflow-y-hidden">
           {answers.map((answer, index) => <li className={`text-5xl p-5 ${answer === questions[index].correctAnswer ? "bg-green-700" : "bg-red-700"}`} key={index}>{answer}</li>)}
         </ul>

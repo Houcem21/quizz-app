@@ -8,8 +8,8 @@ const Header = () => {
     const Menu = () =>
     <div className={`flex justify-between items-center menu-preview w-screen h-screen z-10 absolute ${isMenuHidden ? "hidden" : "block"}`}>
           <div className={`grid h-full w-50 bg-tertiary-color text-2xl p-10 justify-center items-center`}>
-            <a href="#">Home</a>
-            <a href="#">Settings</a>
+            <a href="/admin">Add question</a>
+            <a href="/">Play</a>
             <a href="#">Logout</a>
           </div>
           <div className="clickable w-full h-screen opacity-[.5] bg-black"  onClick={() => setIsMenuHidden(true)} />
