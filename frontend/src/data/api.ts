@@ -1,6 +1,9 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const getQuestions = async (): Promise<any[]> => {
   try {
-    const response = await fetch(`http://localhost:5001/api/questions`);
+    console.log(API_URL)
+    const response = await fetch(`${API_URL}/api/questions`);
     if (!response.ok) {
       throw new Error(`Failed to fetch questions due to: ${response.statusText}`)
     }
