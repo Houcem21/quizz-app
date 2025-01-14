@@ -18,14 +18,22 @@ export default function Home() {
   //Get the questions
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState<Question[]>([]);
+
+  const segmentQuestions = (questions:Question[], segmentCount:number) => {
+    const questionList = [];
+    for (let i = 0; i < segmentCount; i++) {
+      questionList.push(questions[Math.floor(Math.random() * questions.length)]);
+    }
+    return questionList || [];
+  }
   
   useEffect(() => {
     const fetchQuestions = async () => {
       const data = await getQuestions();
-      setQuestions(data);
+      ;
+      setQuestions(segmentQuestions(data, 5));
     };
     fetchQuestions();
-    console.log(questions.length)
   }, [])
 
   const currentQuestion = questions[questionIndex] || {question: "Loading...", answers: []};

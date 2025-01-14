@@ -1,4 +1,6 @@
+const mongoose = require("mongoose");
 const Question = require("../models/Question");
+const transformedData = require("../data/transformed-data.json");
 
     //Get All questions
     const getQuestions = async (req, res) => {
@@ -21,4 +23,15 @@ const Question = require("../models/Question");
         }
     }
 
-module.exports = {getQuestions, addQuestion};
+    const seedDatabase = async () => {
+        try {
+            await Question.insertMany(transformedData)
+            console.log("Success in data importation");
+            mongoose.disconnect();
+        } catch (error) {
+            console.log("Failed to import data", error)
+        }
+    }
+    
+
+module.exports = {getQuestions, addQuestion, seedDatabase};
