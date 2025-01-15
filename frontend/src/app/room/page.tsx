@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { io } from "socket.io-client";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
@@ -9,6 +10,7 @@ export default function CreateRoom() {
   const [roomCode, setRoomCode] = useState("");
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const createRoom = () => {
     if (!username) {
@@ -23,7 +25,8 @@ export default function CreateRoom() {
     // Emit the create room event to the backend
     socket.emit("joinRoom", { username, roomCode: code });
 
-    setMessage(`Room created! Share the code: ${code}`);
+    // Redirect to the room page
+    router.push(`/room/${code}`);
   };
 
   const joinRoom = () => {
@@ -35,7 +38,8 @@ export default function CreateRoom() {
     // Emit the join room event to the backend
     socket.emit("joinRoom", { username, roomCode });
 
-    setMessage("Joined the room! Waiting for others...");
+    // Redirect to the room page
+    router.push(`/room/${roomCode}`);
   };
 
   return (

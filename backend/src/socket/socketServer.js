@@ -19,14 +19,13 @@ function setupWebSocket(server) {
         console.log("A user connected", socket.id);
 
         //Handle joining a room
-        socket.on("joinRoom", ({username, roomCode}) => {
+        socket.on("joinRoom", ({ username, roomCode }) => {
             if (!rooms[roomCode]) {
-                rooms[roomCode] = {players: [], picks: [], host: null, gameStarted: false};
+              rooms[roomCode] = { players: [], picks: [], host: null, gameStarted: false };
             }
-            rooms[roomCode].players.push({id: socket.id, username, score: 0, madePicj: false});
+            rooms[roomCode].players.push({ id: socket.id, username, score: 0, madePick: false });
             console.log(`${username} joined room ${roomCode}`);
             socket.join(roomCode);
-
             io.to(roomCode).emit("roomUpdate", rooms[roomCode]);
         });
 
