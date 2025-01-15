@@ -11,7 +11,7 @@ const Header = () => {
           <div className={`grid h-full w-50 bg-tertiary-color text-2xl p-10 justify-center items-center`}>
             <Link href="/admin">Add question</Link>
             <Link href="/">Play</Link>
-            <Link href="#">Logout</Link>
+            <Link href="/room">Room</Link>
           </div>
           <div className="clickable w-full h-screen opacity-[.5] bg-black"  onClick={() => setIsMenuHidden(true)} />
     </div>
