@@ -30,12 +30,10 @@ const socket: Socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
 export default function RoomPage({ params }: { params: Promise<{ roomCode: string }> }) {
   const [roomCode, setRoomCode] = useState<string | null>(null);
   const [room, setRoom] = useState<Room | null>(null);
-  const [username, setUsername] = useState("");
   const [category, setCategory] = useState("");
   const [timeLimit, setTimeLimit] = useState(30);
   const [questionCount, setQuestionCount] = useState(5);
   const [message, setMessage] = useState("");
-  const router = useRouter();
 
   useEffect(() => {
     const fetchParams = async () => {
