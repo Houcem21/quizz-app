@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectDB = require("./src/config/database");
 const questionRoutes = require("./src/routes/questionRoutes");
+const {setupWebSocket} = require("./src/socket/socketServer");
 
 //Create a Server
 const app = express();
@@ -23,6 +24,9 @@ app.get("/", (req, res) => {
 });
 
 //Start the server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on localhost:${PORT}`);
 })
+
+//Set up Web socket for multiplayer
+setupWebSocket(server);
