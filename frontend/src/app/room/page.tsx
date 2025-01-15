@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("https://quizz-app-ngyt.onrender.com/"); // Replace with your deployed backend URL
+const socket = io("https://quizz-app-ngyt.onrender.com");
 
 export default function CreateRoom() {
   const [roomCode, setRoomCode] = useState("");

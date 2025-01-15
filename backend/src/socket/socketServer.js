@@ -3,9 +3,13 @@ const {Server} = require("socket.io");
 let rooms = {};
 
 function setupWebSocket(server) {
+    const allowedOrigins = [
+        "http://localhost:3000",
+        "https://quizz-app-lilac-zeta.vercel.app"
+    ]
     const io = new Server(server, {
         cors: {
-            origin: "https://quizz-app-lilac-zeta.vercel.app/",
+            origin: allowedOrigins,
             methods: ["GET", "POST"],
         }
     });
