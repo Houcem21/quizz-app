@@ -11,6 +11,7 @@ function setupWebSocket(server) {
         cors: {
             origin: allowedOrigins,
             methods: ["GET", "POST"],
+            credentials: true,
         }
     });
 

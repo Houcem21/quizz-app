@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("https://quizz-app-ngyt.onrender.com");
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
 
 export default function CreateRoom() {
   const [roomCode, setRoomCode] = useState("");
