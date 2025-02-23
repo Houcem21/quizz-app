@@ -45,3 +45,7 @@ body {
 .bg-primary-color-on-active:active {
   background-color: var(--primary-color);
 }
+
+input, select {
+  background-color: #0a0a0a;
+}

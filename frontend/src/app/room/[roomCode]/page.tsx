@@ -28,12 +28,14 @@ const socket: Socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
 
 export default function RoomPage({ params }: { params: Promise<{ roomCode: string }> }) {
   const [roomCode, setRoomCode] = useState<string | null>(null);
+  const [socketId, setSocketId] = useState<string | null>(null); // State for socket.id
   const [room, setRoom] = useState<Room | null>(null);
   const [category, setCategory] = useState("");
   const [timeLimit, setTimeLimit] = useState(30);
   const [questionCount, setQuestionCount] = useState(5);
   const [message, setMessage] = useState("");
 
+  // Fetch and set roomCode from params
   useEffect(() => {
     const fetchParams = async () => {
       const resolvedParams = await params;
@@ -42,28 +44,49 @@ export default function RoomPage({ params }: { params: Promise<{ roomCode: strin
     fetchParams();
   }, [params]);
 
+  // Handle WebSocket events
   useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to WebSocket:", socket);
+      setSocketId(socket?.id || "loading..."); // Set socket.id when connected
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("WebSocket connection error:", err.message);
+    });
+
     socket.on("roomUpdate", (updatedRoom: Room) => {
-        console.log("Room updated: ", updatedRoom);
-        setRoom(updatedRoom);
+      console.log("Room updated:", updatedRoom);
+      setRoom(updatedRoom);
     });
 
     socket.on("AllPlayersPicked", (picks: Pick[]) => {
-      if (room) {
-        setRoom({ ...room, picks });
-      }
+      console.log("All players picked:", picks);
+      setRoom((prevRoom) => prevRoom && { ...prevRoom, picks });
     });
 
     socket.on("gameStarted", () => {
       setMessage("Game has started!");
     });
 
+    // Cleanup listeners
     return () => {
+      socket.off("connect");
       socket.off("roomUpdate");
       socket.off("AllPlayersPicked");
       socket.off("gameStarted");
     };
-  }, [room]);
+  }, []);
+
+  // Emit joinRoom after roomCode and socketId are available
+  useEffect(() => {
+    if (roomCode && socketId) {
+      socket.emit("joinRoom", {
+        username: `User-${socketId.substring(0, 5)}`, // Generate username based on socket.id
+        roomCode,
+      });
+    }
+  }, [roomCode, socketId]);
 
   const handlePickSubmit = () => {
     if (!category) {
@@ -95,7 +118,9 @@ export default function RoomPage({ params }: { params: Promise<{ roomCode: strin
 
   return (
     <div className="p-10">
-      <h1 className="text-4xl mb-5 text-center">Room: {roomCode || "Loading..."}</h1>
+      <h1 className="text-4xl mb-5 text-center">
+        Room: {roomCode || "Loading..."}
+      </h1>
       {room ? (
         <>
           <div className="mb-5">
@@ -103,7 +128,8 @@ export default function RoomPage({ params }: { params: Promise<{ roomCode: strin
             <ul className="list-disc list-inside">
               {room.players.map((player) => (
                 <li key={player.id}>
-                  {player.username} {player.madePick ? "(Pick submitted)" : "(Waiting)"}
+                  {player.username}{" "}
+                  {player.madePick ? "(Pick submitted)" : "(Waiting)"}
                 </li>
               ))}
             </ul>
@@ -138,7 +164,10 @@ export default function RoomPage({ params }: { params: Promise<{ roomCode: strin
                 className="p-2 border rounded"
               />
             </div>
-            <button onClick={handlePickSubmit} className="p-3 bg-blue-500 text-white mt-3">
+            <button
+              onClick={handlePickSubmit}
+              className="p-3 bg-blue-500 text-white mt-3"
+            >
               Submit Pick
             </button>
           </div>
@@ -148,15 +177,18 @@ export default function RoomPage({ params }: { params: Promise<{ roomCode: strin
               <ul className="list-disc list-inside">
                 {room.picks.map((pick, index) => (
                   <li key={index}>
-                    Category: {pick.category}, Time Limit: {pick.timeLimit}s, Questions:{" "}
-                    {pick.questionCount}
+                    Category: {pick.category}, Time Limit: {pick.timeLimit}s,
+                    Questions: {pick.questionCount}
                   </li>
                 ))}
               </ul>
             </div>
           )}
           {room.host && (
-            <button onClick={handleStartGame} className="p-3 bg-green-500 text-white">
+            <button
+              onClick={handleStartGame}
+              className="p-3 bg-green-500 text-white"
+            >
               Start Game
             </button>
           )}

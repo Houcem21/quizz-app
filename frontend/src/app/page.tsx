@@ -73,7 +73,7 @@ export default function Home() {
         </ul>
       </div>
       <div className="h-40 w-60 flex justify-center items-center bg-secondary-color absolute bottom-40 text-7xl">{calculateScore(selectedAnswers)} / {questions.length}</div>
-      <div className="close-icon absolute w-screen top-20 z-10 flex justify-center items-center cursor-pointer"><a href="./"><Image src={HomeIcon} alt="home-icon" height={200} /></a></div>
+      <div className="close-icon absolute w-screen top-10 z-10 flex justify-center items-center cursor-pointer"><a href="./"><Image src={HomeIcon} alt="home-icon" height={200} /></a></div>
     </div>
 
   function calculateScore(answers: string[]) {
@@ -85,7 +85,8 @@ export default function Home() {
   }
 
   return (
-    <div className={`flex flex-col text-center h-screen w-full justify-between`}>
+    <div className={`flex flex-col text-center h-screen w-full justify-between relative`}>
+      <link rel="icon" href="../assets/user-icon.jpg" />
       <Header />
       <main className="grid gap-10 max-h-fit-content">
         <section className="question-container">
@@ -99,6 +100,8 @@ export default function Home() {
         <button onClick={onSubmitAnswer} className="uppercase text-5xl bg-tertiary-color p-5 rounded tracking-widest w-screen h-[100%] cursor-pointer bg-primary-color-on-active">submit</button>
       </footer>
       {(questionIndex> 0) && AnswerSheet(selectedAnswers)}
+      <a className="link-to-portfolio fixed bottom-40 right-10" target="_blank" href="https://samdk.me">
+      <span className="bg-secondary-color p-5 mr-5 text-5xl rounded-xl bg-primary-color-on-hover">SD</span></a>
     </div>
   );
 }
